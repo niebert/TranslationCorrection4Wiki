@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<html><head>
+   <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+   <meta http-equiv="author" content="Engelbert Niehaus (admin)">
+   <meta http-equiv="last-modification" content="23.4.2004 (9:35)">
+   <meta http-equiv="content-language" content="de">
+   <meta http-equiv="desktop-type" content="tasks">
+<script language="javascript">
+
+function replaceStringReverse(pString,pReplace,pSearch)
+//###### replaces in the string "pString" multiple substrings "pSearch" by "pReplace"
+{
+	return replaceString(pString,pSearch,pReplace);
+}
+
+function replaceString(pString,pSearch,pReplace)
+//###### replaces in the string "pString" multiple substrings "pSearch" by "pReplace"
+{
+	//alert("cstring.js - replaceString() "+pString);
+	if (pString != '') {
+		var vHelpString = '';
+        var vN = pString.indexOf(pSearch);
+		var vReturnString = '';
+		while (vN >= 0)
+		{
+			if (vN > 0)
+				vReturnString += pString.substring(0, vN);
+			vReturnString += pReplace;
+            if (vN + pSearch.length < pString.length) {
+				pString = pString.substring(vN+pSearch.length, pString.length);
+			} else {
+				pString = ''
+			}
+			vN = pString.indexOf(pSearch);
+		};
+	};
+	return vReturnString + pString;
+}
+
+
+function el(pID) {
+  return document.getElementById(pID)
+}
+
+function correction4translation()
+{
+	var vString = document.fconvert.latextext.value;
+	document.fconvert.latextext.value = fixTranslation(vString);
+}
+
+
+function fixTranslation(pString) {
+	pString = replaceString(pString,"<math> ","<math>");
+	pString = replaceString(pString,"</ math>","</math>");
+	pString = replaceString(pString," </math>","</math>");
+	pString = pString.replace(/'' ([A-Za-z0-9 ]+) ''/,'\'\'$1\'\'');
+	//pString.replace(/'' ([A-Za-z0-9 ]) ''/,'\'\'$1\'\'');
+	pString = pString.replace(/\^ /g,"^");
+	pString = pString.replace(/ \^/g,"^");
+	pString = pString.replace(/\\ /g,"\\");
+	pString = pString.replace(/_ /g,"_");
+	//pString = pString.replace(/'' ([A-Za-z0-9 ])+ ''/g,"''$1''");
+	return pString
+}
+
+</script>
+
+
+  <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+
+  <meta name="GENERATOR" content="Mozilla/4.7 [en] (WinNT; I) [Netscape]">
+  <title>WikiTranslatorCorrection</title>
+
+</head>
+
+<body style="font-family:Arial,Verdana; font-size:12pt; color:black" bgcolor="#CACACA">
+<h1>Correct Syntax Errors from Translated Wiki Text</h1>
+Translations of MediaWiki source texts e.g. with <a href="https://translate.google.com" target="_blank">Google Translate</a> generate syntax errors especially in mathematical expressions. This tool fixes these problem partially and reduces the editing work.
+<form name="fconvert">
+<textarea name="latextext" cols="125" rows="20">The measurement problem can easily be extended to <math> n </ math> dimensional spaces; this encompasses the dimensions 1, 2 and 3 accessible to intuition, whereby one then has to do with length, area or volume measurement. The dimension problem in <math> n </ math> dimensions is:
+
+Is there an illustration <math> \ mu_n: {\ mathcal P} ({\ mathbb R} ^ n) \ rightarrow [0, \ infty] </ math> with the following properties:
+* '' Positivity '': <math> \ mu_n (A) \ ge 0 </ math> for all <math> A \ subset {\ mathbb R} ^ n </ math> (this condition is already in the default of the [[image (mathematics) | image area]] of the figure),
+* '' Congruence '': <math> \ mu_n (A) \, = \, \ mu_n (B) </ math> if '' A '' and '' B '' are congruent,
+* '' Normality '': <math> \ mu_n ([0,1] ^ n) \, = \, 1 </ math>,
+* <math> \ sigma </ math> - '' Additivity '': <math> \ mu_n (\ bigcup_ {i = 1} ^ \ infty A_i) = \ sum_ {i = 1} ^ \ infty \ mu_n (A_i ) </ math> if <math> A_i \ cap A_j = \ emptyset </ math> for <math> i \ not = j </ math>?
+</textarea><br>
+<input name="bConvert" value=" Convert " onclick="correction4translation()" type="button">
+</form>
+<center style="font-size: 10px;">
+  <a href="https://www.github.com/niebert/TranslatorCorrection4Wiki" target="_blank"> GitHub Sources</a> - <a href="https://github.com/niebert/TranslatorCorrection4Wiki/archive/master.zip"  target="_blank">Download ZIP</a>
+</center>
+</body></html>
